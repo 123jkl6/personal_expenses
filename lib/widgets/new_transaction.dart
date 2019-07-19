@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import "../models/transaction.dart";
 
@@ -13,9 +14,25 @@ class NewTransaction extends StatefulWidget {
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-    final titleController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  DateTime _selectedDate;
 
-  final amountController = TextEditingController();
+  void _presenDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
+    ).then((date) {
+      if (date == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = date;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,33 +47,60 @@ class _NewTransactionState extends State<NewTransaction> {
               decoration: InputDecoration(
                 labelText: "Title",
               ),
-              controller: titleController,
+              controller: _titleController,
               onChanged: (value) {},
             ),
             TextField(
               decoration: InputDecoration(
                 labelText: "Amount",
               ),
-              controller: amountController,
+              controller: _amountController,
               //numberWithOptions to accomodate iOS
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (value) {},
             ),
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    _selectedDate == null
+                        ? "No date chosen. "
+                        : "Picked date : ${DateFormat.yMMMd().format(_selectedDate)}",
+                  ),
+                  FlatButton(
+                    textColor: Theme.of(context).primaryColor,
+                    child: Text(
+                      "Choose Date",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onPressed: _presenDatePicker,
+                  ),
+                ],
+              ),
+            ),
             FlatButton(
               child: Text("Add Transaction"),
-              textColor: Theme.of(context).accentColor,
+              color: Theme.of(context).accentColor,
+              textColor: Theme.of(context).textTheme.button.color,
               onPressed: () {
-                print("Title : " + titleController.text);
-                print("Amount : " + amountController.text);
+                print("Title : " + _titleController.text);
+                print("Amount : " + _amountController.text);
 
-                if (titleController.text.isEmpty || amountController.text.isEmpty || double.parse(amountController.text) <= 0 ){
+                if (_titleController.text.isEmpty ||
+                    _amountController.text.isEmpty ||
+                    double.parse(_amountController.text) <= 0 ||
+                    _selectedDate == null) {
                   return;
                 }
                 widget.addNewTransaction(
-                  titleController.text,
-                  double.parse(amountController.text),
+                  _titleController.text,
+                  double.parse(_amountController.text),
+                  _selectedDate,
                 );
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
             ),
           ],
