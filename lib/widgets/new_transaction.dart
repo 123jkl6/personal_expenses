@@ -7,10 +7,15 @@ import "../models/transaction.dart";
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
 
-  NewTransaction({this.addNewTransaction});
+  NewTransaction({this.addNewTransaction}){
+    print("Consturctor NewTransaction Widget");
+  }
 
   @override
-  _NewTransactionState createState() => _NewTransactionState();
+  _NewTransactionState createState() { 
+    print("createState() NewTransaction");
+    return _NewTransactionState();
+    }
 }
 
 class _NewTransactionState extends State<NewTransaction> {
@@ -18,6 +23,22 @@ class _NewTransactionState extends State<NewTransaction> {
   final _amountController = TextEditingController();
   DateTime _selectedDate;
 
+  _NewTransactionState(){
+    print("Constructor _NewTransactionState State"); 
+  }
+
+@override
+  void initState() {
+    //best practice to call super.initState() first
+    super.initState();
+    print("initState() _NewTransactionState"); 
+  }
+
+  @override
+  void didUpdateWidget(NewTransaction oldWidget) {
+    print("didUpdateWidget() NewTransaction");
+    super.didUpdateWidget(oldWidget);
+  }
   void _presenDatePicker() {
     showDatePicker(
       context: context,
@@ -32,6 +53,12 @@ class _NewTransactionState extends State<NewTransaction> {
         _selectedDate = date;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    print("dispose() NewTransaction");
+    super.dispose();
   }
 
   @override

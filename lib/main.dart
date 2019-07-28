@@ -46,7 +46,7 @@ class HomePage extends StatefulWidget {
   }
 }
 
-class _HomePageState extends State {
+class _HomePageState extends State with WidgetsBindingObserver {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   final List<Transaction> _transactions = [
@@ -63,6 +63,24 @@ class _HomePageState extends State {
     //   date: DateTime.now(),
     // ),
   ];
+
+  @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addObserver(this); 
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state){
+    //print new state. 
+    print(state);
+  }
+
+  @override
+  void dispose(){
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((oneTransaction) {
@@ -105,6 +123,14 @@ class _HomePageState extends State {
             behavior: HitTestBehavior.opaque,
           );
         });
+  }
+
+  Widget _buildLandscapeContent(){
+    return null;
+  }
+
+  Widget _buildPotraitContent(){
+    return null;
   }
 
   @override

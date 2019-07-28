@@ -13,7 +13,7 @@ class UserTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        TransactionList(transactions: transactions,),
+        TransactionList(transactions: transactions,deleteTransaction: deleteTransaction,),
       ],
     );
   }
