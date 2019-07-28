@@ -39,24 +39,27 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     print(groupedTransactionValues);
 
-    return Card(
-      elevation: 6,
-      margin: EdgeInsets.all(20),
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: groupedTransactionValues.map((oneTransaction) {
-            return Flexible(
-              fit: FlexFit.tight,
-              child: ChartBar(
-                  label: oneTransaction["day"],
-                  spendingAmount: oneTransaction["amount"],
-                  spendingPctOfTotal: totalSpending == 0
-                      ? 0
-                      : (oneTransaction["amount"] as double) / totalSpending),
-            );
-          }).toList(),
+    return Container(
+      //height: MediaQuery.of(context).size.height * 0.4,
+      child: Card(
+        elevation: 6,
+        margin: EdgeInsets.all(20),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: groupedTransactionValues.map((oneTransaction) {
+              return Flexible(
+                fit: FlexFit.tight,
+                child: ChartBar(
+                    label: oneTransaction["day"],
+                    spendingAmount: oneTransaction["amount"],
+                    spendingPctOfTotal: totalSpending == 0
+                        ? 0
+                        : (oneTransaction["amount"] as double) / totalSpending),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );

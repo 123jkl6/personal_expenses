@@ -13,29 +13,36 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 450,
+      //height: MediaQuery.of(context).size.height * 0.6,
       child: transactions.isEmpty
-          ? Column(
-              children: <Widget>[
-                const Text("No transactions added yet. "),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 200,
-                  child: Image.asset(
-                    "assets/images/waiting.png",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
+          ? LayoutBuilder(
+              builder: (ctx, constraints) {
+                return Column(
+                  children: <Widget>[
+                    Container(
+                      //height: constraints.maxHeight * 0.1,
+                      child: FittedBox(child: const Text("No transactions added yet. ")),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: constraints.maxHeight * 0.6,
+                      child: Image.asset(
+                        "assets/images/waiting.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                );
+              },
             )
-            //ListView.builder does not allow keys
+          //ListView.builder will rebuild and assign different color to the same transaction.
           : ListView(
               children: transactions
                   .map(
                     (tx) => TransactionItem(
-                      key:ValueKey(tx.id),
+                      key: ValueKey(tx.id),
                       transaction: tx,
                       deleteTransaction: deleteTransaction,
                     ),

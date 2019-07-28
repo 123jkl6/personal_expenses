@@ -10,7 +10,7 @@ class TransactionItem extends StatefulWidget {
     Key key,
     @required this.transaction,
     @required this.deleteTransaction,
-  }) : super(key: key); 
+  }) : super(key: key);
 
   final Transaction transaction;
   final Function deleteTransaction;
@@ -34,14 +34,20 @@ class _TransactionItemState extends State<TransactionItem> {
     super.initState();
   }
 
+  void triggerDelete() {
+    print("deleting : " + widget.transaction.id);
+    widget.deleteTransaction(widget.transaction.id);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    print("build() TranasctionItem");
     return Card(
       elevation: 5,
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       child: ListTile(
         leading: Container(
-          
           height: 60,
           width: 60,
           decoration: BoxDecoration(
@@ -61,14 +67,18 @@ class _TransactionItemState extends State<TransactionItem> {
         subtitle: Text(
           DateFormat.yMMMd().format(widget.transaction.date),
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () {
-            print("deleting : "+widget.transaction.id);
-            widget.deleteTransaction(widget.transaction.id);
-          },
-          color: Theme.of(context).errorColor,
-        ),
+        trailing: mediaQuery.size.width > 360
+            ? FlatButton.icon(
+                icon: Icon(Icons.delete),
+                textColor: Theme.of(context).errorColor,
+                label: Text("Delete"),
+                onPressed: triggerDelete,
+              )
+            : IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: triggerDelete,
+                color: Theme.of(context).errorColor,
+              ),
       ),
     );
   }
